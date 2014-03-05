@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+
+PORT=7000
+
+# Set up Rails app. Run this script immediately after cloning the codebase.
+# https://github.com/thoughtbot/guides/tree/master/protocol
+
+# Exit if any subcommand fails
+set -e
+
+# Set up Ruby dependencies via Bundler
+bundle check
+
+# Set up the database
+bundle exec rake db:setup db:test:prepare
+
+# Set up configurable environment variables
+if [ ! -f .env ]; then
+  cp .sample.env .env
+  echo "Do not forget to update .env with your IdP settings"
+fi
+
+if [ "7000" -eq "$PORT" ]; then
+  echo "Port 7000 is the default port and may be used by other applications"
+fi
+
+# Pick a port for Foreman
+echo "port: $PORT" > .foreman
+
+# Set up DNS via Pow
+if [ -d ~/.pow ]
+then
+  echo $PORT > ~/.pow/`basename $PWD`
+else
+  echo "Pow not set up but the team uses it for this project. Setup: http://goo.gl/RaDPO"
+fi

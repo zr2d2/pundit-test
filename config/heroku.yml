@@ -1,0 +1,19 @@
+
+production: &production
+  app: wf4-pundit-test-production
+  tag: production
+  addons:
+    - pgbackups:auto-month
+    - memcachedcloud:25
+    - scheduler:standard
+  config: &production-config
+    SECRET_KEY_BASE:           c3ae859eaa7d351dfdea243468085c846c25d4c52df3c205998b2213fc0982c93f5db456d5d2e4b4e9b25f7471d524833ac68ba78110d11be25b6048490815e6
+    SAML_IDP_ISSUER:           pundit-test
+    SAML_IDP_TARGET_URL:       http://wf4-saml-idp.herokuapp.com/saml/auth
+    SAML_IDP_CERT_FINGERPRINT: 74:51:A0:EE:40:A5:B3:D9:6F:1C:23:8D:59:04:81:8A:4B:12:F5:FF
+    SAML_IDP_NAME_FORMAT:      urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
+
+
+staging:
+  <<: *production
+  app: wf4-pundit-test-staging
